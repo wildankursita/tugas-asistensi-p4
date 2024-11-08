@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <string.h>
+
+// Struct untuk karakter Pegawai
+typedef struct {
+    char nama[20];
+    int energy;
+    int loves;
+} Pegawai;
+
+// Struct untuk karakter Pet (Hewan Peliharaan)
+typedef struct {
+    char nama[20];
+    int energy;
+    int loves;
+    char jenis[10]; // Jenis hewan: "Anjing" atau "Kucing"
+} Pet;
+
+// Fungsi aktivitas untuk pegawai
+void rest(Pegawai *pegawai) {
+    pegawai->energy += 5;
+    printf("%s beristirahat! Energy meningkat menjadi %d.\n", pegawai->nama, pegawai->energy);
+}
+
+// Fungsi aktivitas untuk pet berdasarkan jenisnya
+void petActivity(Pet *pet) {
+    if (strcmp(pet->jenis, "Anjing") == 0) {
+        pet->energy -= 2;
+        pet->loves += 3;
+        printf("%s berjalan-jalan! Loves meningkat menjadi %d, Energy berkurang menjadi %d.\n", pet->nama, pet->loves, pet->energy);
+    } else if (strcmp(pet->jenis, "Kucing") == 0) {
+        pet->loves += 4;
+        printf("%s di-cuddle! Loves meningkat menjadi %d.\n", pet->nama, pet->loves);
+    }
+}
+
+// Fungsi untuk memberi makan pet
+void feed(Pet *pet) {
+    pet->energy += 5;
+    printf("%s telah diberi makan! Energy meningkat menjadi %d.\n", pet->nama, pet->energy);
+}
+
+// Fungsi untuk menampilkan atribut karakter
+void tampilkanAtributPegawai(Pegawai pegawai) {
+    printf("Pegawai %s:\n  Energy: %d\n  Loves: %d\n", pegawai.nama, pegawai.energy, pegawai.loves);
+}
+
+void tampilkanAtributPet(Pet pet) {
+    printf("%s %s:\n  Energy: %d\n  Loves: %d\n", pet.jenis, pet.nama, pet.energy, pet.loves);
+}
+
+int main() {
+    // Inisialisasi karakter pegawai dan pet
+    Pegawai pegawai[4] = {{"Alice", 10, 5}, {"Bob", 12, 4}, {"Charlie", 15, 6}, {"Diane", 8, 7}};
+    Pet pets[4] = {{"Buddy", 10, 3, "Anjing"}, {"Rocky", 8, 4, "Anjing"}, {"Luna", 7, 6, "Kucing"}, {"Bella", 8, 5, "Kucing"}};
+
+    char command[50];
+    char target[20];
+    
+    printf("Selamat datang di Pet Cafe!\n");
+
+    while (1) {
+        printf("\nMasukkan perintah: ");
+        scanf("%s %s", command, target);
+
+        // Perintah untuk aktivitas pegawai
+        if (strcmp(command, "REST") == 0) {
+            for (int i = 0; i < 4; i++) {
+                if (strcmp(target, pegawai[i].nama) == 0) {
+                    rest(&pegawai[i]);
+                    break;
+                }
+            }
+        }
+        // Perintah untuk aktivitas pet
+        else if (strcmp(command, "ACTIVITY") == 0) {
+            for (int i = 0; i < 4; i++) {
+                if (strcmp(target, pets[i].nama) == 0) {
+                    petActivity(&pets[i]);
+                    break;
+                }
+            }
+        }
+        // Perintah untuk memberi makan pet
+        else if (strcmp(command, "FEED") == 0) {
+            for (int i = 0; i < 4; i++) {
+                if (strcmp(target, pets[i].nama) == 0) {
+                    feed(&pets[i]);
+                    break;
+                }
+            }
+        }
+        // Perintah untuk menampilkan atribut karakter
+        else if (strcmp(command, "ATTR") == 0) {
+            int found = 0;
+            for (int i = 0; i < 4; i++) {
+                if (strcmp(target, pegawai[i].nama) == 0) {
+                    tampilkanAtributPegawai(pegawai[i]);
+                    found = 1;
+                    break;
+                } else if (strcmp(target, pets[i].nama) == 0) {
+                    tampilkanAtributPet(pets[i]);
+                    found = 1;
+                    break;
+                }
+            }
+            if (!found) {
+                printf("Karakter tidak ditemukan!\n");
+            }
+        }
+        // Perintah untuk keluar dari simulasi
+        else if (strcmp(command, "EXIT") == 0) {
+            printf("Terima kasih telah bermain di Pet Cafe!\n");
+            break;
+        }
+        else {
+            printf("Perintah tidak dikenali!\n");
+        }
+    }
+    return 0;
+}
